@@ -32,6 +32,9 @@ RUN apk update && apk add --no-cache \
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-enable pdo_mysql
 
+# Install Node.js and npm
+RUN apk add --update nodejs npm
+
 # Install PHP Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -44,9 +47,9 @@ RUN usermod -u 1000 www-data
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www/html
 
-# Change current user to www
-USER www-data
-
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
+
+# Change current user to www
+USER www-data
